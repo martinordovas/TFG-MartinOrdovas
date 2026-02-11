@@ -1,0 +1,72 @@
+body{
+    font-family: 'SF Pro Display';
+    font-weight: normal;
+}
+
+.title-video{
+    position: relative;
+    text-align: center;
+    top: 45%;
+    left: 10%;
+    z-index: 1;
+}
+
+.title{
+    font-family: 'Santor Regular';
+    font-weight: bolder;
+    font-size: 500%;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px #000000;
+}
+
+.login-page {
+    height: 100vh;
+    overflow: hidden; /* Evita scroll innecesario en el login */
+}
+
+.row.g-0 {
+    height: 100vh;
+}
+
+/* Sección del Video */
+.title-side {
+    position: relative;
+    overflow: hidden;
+    height: 100vh;
+    background: #ffffff00;
+}
+
+.bg-video {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: cover; /* Clave para que el video no se estire */
+}
+
+/* Sección del Formulario */
+.form-login{
+    z-index: 3;
+    background-color: rgba(255, 255, 255, 0.6);
+    padding: 40px;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+}
+
+.custom-input {
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+}
+
+.custom-input:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+}

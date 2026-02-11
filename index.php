@@ -1,129 +1,127 @@
 <?php
 include 'phpscripts/dbconn.php';
-// Si no hay sesión, mandamos al login
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
+
+$mi_id = $_SESSION['user_id'];
+// Detectamos qué pestaña quiere ver el usuario (por defecto 'recientes')
+$vista = isset($_GET['view']) ? $_GET['view'] : 'recientes';
+
+// PREPARAMOS LA CONSULTA SEGÚN LA VISTA
+if ($vista === 'siguiendo') {
+    // Añadimos u.habilidades a la selección
+    $sql = "SELECT p.*, u.nombre, u.avatar, u.habilidades 
+            FROM publicaciones p
+            JOIN usuarios u ON p.id_usuario = u.id
+            JOIN seguidores s ON u.id = s.id_seguido
+            WHERE s.id_seguidor = ?
+            ORDER BY p.fecha_publicacion DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $mi_id);
+} else {
+    // Añadimos u.habilidades a la selección
+    $sql = "SELECT p.*, u.nombre, u.avatar, u.habilidades 
+            FROM publicaciones p
+            JOIN usuarios u ON p.id_usuario = u.id
+            ORDER BY p.fecha_publicacion DESC";
+    $stmt = $conn->prepare($sql);
+}
+
+$stmt->execute();
+$res_posts = $stmt->get_result();
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillSwap - Feed</title>
+    <title>Inicio - Skill-net</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet">
+    <link rel="stylesheet" href="css/fonts.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-
     <div class="container-fluid">
         <div class="row">
-            <nav class="col-md-3 col-lg-2 d-md-block sidebar">
-                <div class="position-sticky">
-                    <h3 class="px-3 mb-4 text-primary">SkillSwap</h3>
-                    <ul class="nav flex-column">
+            <?php include("phpscripts/navbar.php"); ?>
+            <main class="main-content col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="container mt-4" style="max-width: 700px;">
+
+                    <ul class="nav nav-pills nav-fill mb-4 p-2">
                         <li class="nav-item">
-                            <a class="nav-link active text-dark" href="index.php">
-                                <i class="bi bi-house-door-fill me-2"></i> Inicio
+                            <a class="nav-link <?php echo ($vista === 'recientes') ? 'active' : 'text-dark'; ?>"
+                                href="index.php?view=recientes">
+                                <i class="bi bi-globe me-2"></i>Explorar Todo
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="buscar.php">
-                                <i class="bi bi-search me-2"></i> Explorar
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="mensajes.php">
-                                <i class="bi bi-chat-dots me-2"></i> Mensajes
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="perfil.php">
-                                <i class="bi bi-person-circle me-2"></i> Perfil
-                            </a>
-                        </li>
-                        <hr>
-                        <li class="nav-item">
-                            <a class="nav-link text-danger" href="phpscripts/logout.php">
-                                <i class="bi bi-box-arrow-right me-2"></i> Salir
+                            <a class="nav-link <?php echo ($vista === 'siguiendo') ? 'active' : 'text-dark'; ?>"
+                                href="index.php?view=siguiendo">
+                                <i class="bi bi-people-fill me-2"></i>Siguiendo
                             </a>
                         </li>
                     </ul>
-                </div>
-            </nav>
 
-            <main class="col-md-9 ms-sm-auto col-lg-10 main-content">
-                <div class="row justify-content-center">
-                    <div class="col-md-8">
-
-                        <div class="card mb-4 shadow-sm">
-                            <div class="card-body">
-                                <form action="phpscripts/publicar.php" method="POST">
-                                    <textarea name="contenido" class="form-control mb-2" rows="3"
-                                        placeholder="¿Qué necesitas o qué ofreces hoy?"></textarea>
-                                    <div class="text-end">
-                                        <button type="submit" class="btn btn-primary btn-sm">Publicar</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-                        <h5 class="mb-3">Publicaciones recientes</h5>
-
-                        <?php
-                        // Consulta mejorada para incluir el ID del usuario
-                        $query = "SELECT p.contenido, p.fecha_publicacion, u.id AS usuario_id, u.nombre, u.habilidades, u.avatar 
-            FROM publicaciones p 
-            JOIN usuarios u ON p.id_usuario = u.id 
-            ORDER BY p.fecha_publicacion DESC";
-
-                        $res = mysqli_query($conn, $query);
-
-                        while ($post = mysqli_fetch_assoc($res)) {
-                            // Lógica para imagen por defecto
-                            $fotoPerfil = (!empty($post['avatar']) && file_exists("img/" . $post['avatar']))
-                                ? $post['avatar']
-                                : "user.png";
-                            ?>
-                            <div class="card mb-3 shadow-sm">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center mb-2">
-                                        <a href="perfil.php?id=<?php echo $post['usuario_id']; ?>">
-                                            <img src="assets/img/<?php echo $fotoPerfil; ?>" class="rounded-circle me-2"
-                                                width="45" height="45" alt="Perfil">
-                                        </a>
-                                        <div>
-                                            <h6 class="mb-0">
-                                                <a href="perfil.php?id=<?php echo $post['usuario_id']; ?>"
-                                                    class="text-decoration-none text-dark fw-bold">
-                                                    <?php echo htmlspecialchars($post['nombre']); ?>
-                                                </a>
-                                            </h6>
-                                            <small class="text-muted">
-                                                <?php echo date("d/m/Y H:i", strtotime($post['fecha_publicacion'])); ?>
-                                            </small>
+                    <div class="feed">
+                        <?php if ($res_posts->num_rows > 0): ?>
+                            <?php while ($post = $res_posts->fetch_assoc()): ?>
+                                <div class="mb-4">
+                                    <div class="">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <a href="perfil.php?id=<?php echo $post['id_usuario']; ?>"
+                                                class="">
+                                                <img src="img/<?php echo !empty($post['avatar']) ? $post['avatar'] : 'user.png'; ?>"
+                                                    class="rounded-circle me-3 fotofeed" width="45" height="45">
+                                            </a>
+                                            <div>
+                                                <h6 class="mb-0 fw-bold">
+                                                    <a href="perfil.php?id=<?php echo $post['id_usuario']; ?>"
+                                                        class="text-decoration-none text-dark">
+                                                        <?php echo htmlspecialchars($post['nombre']); ?>
+                                                    </a>
+                                                </h6>
+                                                <div class="mb-1">
+                                                    <?php
+                                                    $tags = explode(",", $post['habilidades'] ?? '');
+                                                    foreach ($tags as $tag) {
+                                                        if (!empty(trim($tag))) {
+                                                            echo '<span class="me-1 px-3">' . htmlspecialchars(trim($tag)) . '</span>';
+                                                        }
+                                                    }
+                                                    ?>
+                                                </div>
+                                                <small class="">
+                                                    <?php echo date("d M, H:i", strtotime($post['fecha_publicacion'])); ?>
+                                                </small>
+                                            </div>
                                         </div>
+                                        <p class="fs-5">
+                                            <?php echo nl2br(htmlspecialchars($post['contenido'])); ?>
+                                        </p>
                                     </div>
-                                    <p class="card-text">
-                                        <?php echo htmlspecialchars($post['contenido']); ?>
-                                    </p>
                                 </div>
+                            <?php endwhile; ?>
+                        <?php else: ?>
+                            <div class="text-center p-5 bg-white rounded shadow-sm">
+                                <i class="bi bi-emoji-frown display-1"></i>
+                                <p class="mt-3 text-muted">No hay publicaciones aquí todavía. ¡Sigue a alguien para empezar!
+                                </p>
+                                <a href="buscar.php" class="">Explorar usuarios</a>
                             </div>
-                            <?php
-                        }
-                        ?>
-
+                        <?php endif; ?>
                     </div>
+
                 </div>
             </main>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

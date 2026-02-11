@@ -6,7 +6,7 @@ session_start();
 $host = "localhost";
 $user = "root";
 $pass = "ordovas2005";
-$db_name = "tfg_social_habilidades";
+$db_name = "skillnet";
 
 $conn = mysqli_connect($host, $user, $pass, $db_name);
 

@@ -1,5 +1,11 @@
 body {
+    /*font-family: 'Santor Regular';*/
+    font-family: 'SF Pro Display';
+    font-weight: normal;
     background-color: #f8f9fa;
+}
+.fotofeed{
+    object-fit: cover;
 }
 
 .sidebar {
@@ -16,6 +22,25 @@ body {
     margin-left: 250px;
     /* Ancho de la sidebar en PC */
     padding: 20px;
+}
+
+/* Estilo general para fotos de perfil circulares */
+.img-perfil-crop {
+    object-fit: cover !important; /* Recorta la imagen para que encaje sin estirarse */
+    object-position: center !important; /* Centra el recorte */
+    border: 2px solid #dee2e6; /* Un pequeño borde para que resalte */
+}
+
+/* Tamaño para el feed */
+.img-feed {
+    width: 45px;
+    height: 45px;
+}
+
+/* Tamaño para la página de perfil */
+.img-perfil-grande {
+    width: 150px;
+    height: 150px;
 }
 
 /* Ajuste para móviles */
