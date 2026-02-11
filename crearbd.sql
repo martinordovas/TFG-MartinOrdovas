@@ -1,7 +1,12 @@
 -- Crear la base de datos
-CREATE DATABASE IF NOT EXISTS skillnet CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS skillnet 
+CHARACTER SET utf8mb4 
+COLLATE utf8mb4_unicode_ci;
 drop DATABASE tfg_social_habilidades;
+drop DATABASE skillnet;
 USE skillnet;
+drop Table usuarios;
+
 
 -- Tabla de usuarios (con los campos para tu perfil)
 CREATE TABLE IF NOT EXISTS usuarios (
@@ -13,7 +18,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     bio TEXT,
     avatar VARCHAR(255) DEFAULT 'default.png',
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Tabla de publicaciones (para el feed estilo Twitter que mencionaste)
 CREATE TABLE IF NOT EXISTS publicaciones (
@@ -22,7 +27,7 @@ CREATE TABLE IF NOT EXISTS publicaciones (
     contenido TEXT NOT NULL,
     fecha_publicacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 select * from publicaciones;
 select * from usuarios;

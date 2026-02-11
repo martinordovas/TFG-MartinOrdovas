@@ -9,7 +9,7 @@ $pass = "ordovas2005";
 $db_name = "skillnet";
 
 $conn = mysqli_connect($host, $user, $pass, $db_name);
-
+$conn->set_charset("utf8mb4");
 if (!$conn) {
     die("Error de conexión: " . mysqli_connect_error());
 }

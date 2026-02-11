@@ -1,15 +1,24 @@
-<nav class="col-md-3 col-lg-2 d-md-block sidebar">
+<nav class="d-md-block sidebar sticky-top border-bottom border-md-end">
     <div class="position-sticky">
-        <h3 class="px-3 mb-4">Skill-net</h3>
-        <ul class="nav flex-column">
+        <h3 class="px-3 mb-4 d-none d-md-block">Skill-net <i class="bi bi-wifi"></i></h3>
+        <ul class="nav flex-row flex-md-column justify-content-around w-100">
+            <!--
             <li class="nav-item">
-                <a class="nav-link active text-dark" href="index.php">
-                    <i class="bi bi-house-door-fill me-2"></i> Inicio
+                <a class="nav-link text-dark p-2">
+                    <span class="d-md-none d-inline ms-2">Skill-net <i class="bi bi-wifi"></i></span>
+                </a>
+            </li>
+            -->
+            <li class="nav-item">
+                <a class="nav-link text-dark p-2" href="index.php">
+                    <i class="bi bi-house-door-fill"></i>
+                    <span class="d-none d-md-inline ms-2">Inicio</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" href="buscar.php">
-                    <i class="bi bi-search me-2"></i> Explorar
+                <a class="nav-link text-dark p-2" href="buscar.php">
+                    <i class="bi bi-search"></i>
+                    <span class="d-none d-md-inline ms-2">Explorar</span>
                 </a>
             </li>
             <?php
@@ -22,8 +31,9 @@
             ?>
 
             <li class="nav-item">
-                <a class="nav-link text-dark d-flex justify-content-between align-items-center" href="mensajes.php">
-                    <span><i class="bi bi-chat-dots me-2"></i> Mensajes</span>
+                <a class="nav-link text-dark p-2" href="mensajes.php">
+                    <i class="bi bi-chat-dots"></i>
+                    <span class="d-none d-md-inline ms-2">Mensajes</span>
                     <?php if ($no_leidos > 0): ?>
                         <span class="badge rounded-pill bg-danger">
                             <?php echo $no_leidos; ?>
@@ -32,14 +42,15 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" href="perfil.php">
-                    <i class="bi bi-person-circle me-2"></i> Perfil
+                <a class="nav-link text-dark p-2" href="perfil.php">
+                    <i class="bi bi-person-circle"></i>
+                    <span class="d-none d-md-inline ms-2">Perfil</span>
                 </a>
             </li>
-            <hr>
             <li class="nav-item">
-                <a class="nav-link text-danger" href="phpscripts/logout.php">
-                    <i class="bi bi-box-arrow-right me-2"></i> Salir
+                <a class="nav-link text-danger p-2" href="phpscripts/logout.php">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span class="d-none d-md-inline ms-2">Cerrar sesión</span>
                 </a>
             </li>
         </ul>

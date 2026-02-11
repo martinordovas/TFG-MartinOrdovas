@@ -51,34 +51,25 @@ $res_posts = $stmt->get_result();
     <div class="container-fluid">
         <div class="row">
             <?php include("phpscripts/navbar.php"); ?>
-            <main class="main-content col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <main class="main-content">
                 <div class="container mt-4" style="max-width: 700px;">
-
-                    <ul class="nav nav-pills nav-fill mb-4 p-2">
-                        <li class="nav-item">
-                            <a class="nav-link <?php echo ($vista === 'recientes') ? 'active' : 'text-dark'; ?>"
-                                href="index.php?view=recientes">
-                                <i class="bi bi-globe me-2"></i>Explorar Todo
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link <?php echo ($vista === 'siguiendo') ? 'active' : 'text-dark'; ?>"
-                                href="index.php?view=siguiendo">
-                                <i class="bi bi-people-fill me-2"></i>Siguiendo
-                            </a>
-                        </li>
-                    </ul>
-
+                    <h5 class="mb-3">Publicaciones recientes</h5>
                     <div class="feed">
                         <?php if ($res_posts->num_rows > 0): ?>
                             <?php while ($post = $res_posts->fetch_assoc()): ?>
                                 <div class="mb-4">
                                     <div class="">
                                         <div class="d-flex align-items-center mb-3">
-                                            <a href="perfil.php?id=<?php echo $post['id_usuario']; ?>"
-                                                class="">
-                                                <img src="img/<?php echo !empty($post['avatar']) ? $post['avatar'] : 'user.png'; ?>"
-                                                    class="rounded-circle me-3 fotofeed" width="45" height="45">
+                                            <a href="perfil.php?id=<?php echo $post['id_usuario']; ?>" class="">
+                                                <?php
+                                                // Definimos la foto: si hay nombre en DB y el archivo existe físicamente
+                                                $fotoPath = "img/user.png"; // Por defecto
+                                                if (!empty($post['avatar']) && file_exists("img/" . $post['avatar'])) {
+                                                    $fotoPath = "img/" . $post['avatar'];
+                                                }
+                                                ?>
+                                                <img src="<?php echo $fotoPath; ?>" class="rounded-circle me-3 fotofeed"
+                                                    width="45" height="45">
                                             </a>
                                             <div>
                                                 <h6 class="mb-0 fw-bold">
@@ -118,6 +109,26 @@ $res_posts = $stmt->get_result();
                         <?php endif; ?>
                     </div>
 
+                </div>
+                <div class="publish-box shadow-lg">
+                    <div class="view-tabs d-flex justify-content-center gap-2 mb-2">
+                        <a href="index.php?view=recientes"
+                            class="tab-item <?php echo ($vista === 'recientes') ? 'active' : ''; ?>">
+                            Explorar
+                        </a>
+                        <a href="index.php?view=siguiendo"
+                            class="tab-item <?php echo ($vista === 'siguiendo') ? 'active' : ''; ?>">
+                            Siguiendo
+                        </a>
+                    </div>
+
+                    <form action="phpscripts/publicar.php" method="POST" class="d-flex align-items-center gap-2">
+                        <textarea name="contenido" class="form-control" rows="1" placeholder="¿Qué necesitas hoy?"
+                            style="resize: none;"></textarea>
+                        <button type="submit" class="">
+                            <i class="bi bi-send-fill"></i>
+                        </button>
+                    </form>
                 </div>
             </main>
         </div>
