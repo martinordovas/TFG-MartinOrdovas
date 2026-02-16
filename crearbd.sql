@@ -76,7 +76,23 @@ CREATE TABLE IF NOT EXISTS seguidores (
     UNIQUE(id_seguidor, id_seguido) -- Evita que sigas dos veces a la misma persona
 );
 
+CREATE TABLE IF NOT EXISTS valoraciones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_valorador INT NOT NULL, -- El que pone la nota
+    id_valorado INT NOT NULL,  -- El que recibe la nota
+    puntuacion INT CHECK (puntuacion >= 1 AND puntuacion <= 5),
+    comentario TEXT,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_valorador) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_valorado) REFERENCES usuarios(id) ON DELETE CASCADE,
+    UNIQUE(id_valorador, id_valorado) -- Para que no puedan valorar dos veces a la misma persona
+);
+
+ALTER TABLE valoraciones ADD UNIQUE KEY unica_valoracion (id_valorador, id_valorado);
+
 select * from mensajes;
 select * from seguidores;
 delete from mensajes;
+select * from valoraciones;
+delete from valoraciones;
 show tables;

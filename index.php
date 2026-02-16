@@ -1,37 +1,6 @@
 <?php
 include 'phpscripts/dbconn.php';
-
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}
-
-$mi_id = $_SESSION['user_id'];
-// Detectamos qué pestaña quiere ver el usuario (por defecto 'recientes')
-$vista = isset($_GET['view']) ? $_GET['view'] : 'recientes';
-
-// PREPARAMOS LA CONSULTA SEGÚN LA VISTA
-if ($vista === 'siguiendo') {
-    // Añadimos u.habilidades a la selección
-    $sql = "SELECT p.*, u.nombre, u.avatar, u.habilidades 
-            FROM publicaciones p
-            JOIN usuarios u ON p.id_usuario = u.id
-            JOIN seguidores s ON u.id = s.id_seguido
-            WHERE s.id_seguidor = ?
-            ORDER BY p.fecha_publicacion DESC";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $mi_id);
-} else {
-    // Añadimos u.habilidades a la selección
-    $sql = "SELECT p.*, u.nombre, u.avatar, u.habilidades 
-            FROM publicaciones p
-            JOIN usuarios u ON p.id_usuario = u.id
-            ORDER BY p.fecha_publicacion DESC";
-    $stmt = $conn->prepare($sql);
-}
-
-$stmt->execute();
-$res_posts = $stmt->get_result();
+include 'phpscripts/indexLogic.php';
 ?>
 
 <!DOCTYPE html>
@@ -39,6 +8,7 @@ $res_posts = $stmt->get_result();
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio - Skill-net</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
@@ -51,15 +21,15 @@ $res_posts = $stmt->get_result();
     <div class="container-fluid">
         <div class="row">
             <?php include("phpscripts/navbar.php"); ?>
-            <main class="main-content">
+            <main class="main-content">    
                 <div class="container mt-4" style="max-width: 700px;">
                     <h5 class="mb-3">Publicaciones recientes</h5>
                     <div class="feed">
                         <?php if ($res_posts->num_rows > 0): ?>
                             <?php while ($post = $res_posts->fetch_assoc()): ?>
                                 <div class="mb-4">
-                                    <div class="">
-                                        <div class="d-flex align-items-center mb-3">
+                                    <div class="post-design pb-0">
+                                        <div class="d-flex align-items-center mb-3 usr-info">
                                             <a href="perfil.php?id=<?php echo $post['id_usuario']; ?>" class="">
                                                 <?php
                                                 // Definimos la foto: si hay nombre en DB y el archivo existe físicamente
@@ -83,7 +53,7 @@ $res_posts = $stmt->get_result();
                                                     $tags = explode(",", $post['habilidades'] ?? '');
                                                     foreach ($tags as $tag) {
                                                         if (!empty(trim($tag))) {
-                                                            echo '<span class="me-1 px-3">' . htmlspecialchars(trim($tag)) . '</span>';
+                                                            echo '<span class="me-2 tag-pill px-2">' . htmlspecialchars(trim($tag)) . '</span>';
                                                         }
                                                     }
                                                     ?>
@@ -93,12 +63,13 @@ $res_posts = $stmt->get_result();
                                                 </small>
                                             </div>
                                         </div>
-                                        <p class="fs-5">
+                                        <p class="fs-6 usr-post">
                                             <?php echo nl2br(htmlspecialchars($post['contenido'])); ?>
                                         </p>
                                     </div>
                                 </div>
                             <?php endwhile; ?>
+                            <div class="finalpadding"></div>
                         <?php else: ?>
                             <div class="text-center p-5 bg-white rounded shadow-sm">
                                 <i class="bi bi-emoji-frown display-1"></i>
@@ -125,7 +96,7 @@ $res_posts = $stmt->get_result();
                     <form action="phpscripts/publicar.php" method="POST" class="d-flex align-items-center gap-2">
                         <textarea name="contenido" class="form-control" rows="1" placeholder="¿Qué necesitas hoy?"
                             style="resize: none;"></textarea>
-                        <button type="submit" class="">
+                        <button type="submit" class="btn-send-msg">
                             <i class="bi bi-send-fill"></i>
                         </button>
                     </form>

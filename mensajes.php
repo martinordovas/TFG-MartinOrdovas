@@ -1,70 +1,29 @@
-<?php
-include 'phpscripts/dbconn.php';
-
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}
-
-$mi_id = $_SESSION['user_id'];
-// Usuario con el que estamos hablando
-$contacto_id = isset($_GET['id']) ? intval($_GET['id']) : null;
-if ($contacto_id) {
-    // Marcamos como leídos los mensajes que me envió este contacto
-    $update_leido = $conn->prepare("UPDATE mensajes SET leido = 1 WHERE id_emisor = ? AND id_receptor = ?");
-    $update_leido->bind_param("ii", $contacto_id, $mi_id);
-    $update_leido->execute();
-}
-
-// 1. Lógica para ENVIAR mensaje
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['enviar_msg'])) {
-    $msg = trim($_POST['mensaje']);
-    $receptor = intval($_POST['receptor_id']);
-
-    if (!empty($msg)) {
-        $ins = $conn->prepare("INSERT INTO mensajes (id_emisor, id_receptor, mensaje) VALUES (?, ?, ?)");
-        $ins->bind_param("iis", $mi_id, $receptor, $msg);
-        $ins->execute();
-        // Recargamos para ver el mensaje nuevo
-        header("Location: mensajes.php?id=" . $receptor);
-        exit();
-    }
-}
-
-// 2. Obtener lista de personas con las que he hablado (Bandeja de entrada)
-// Esta consulta es un poco "pro", agrupa los mensajes para sacar los contactos únicos
-$sql_contactos = "SELECT DISTINCT u.id, u.nombre, u.avatar 
-                  FROM usuarios u 
-                  JOIN mensajes m ON (u.id = m.id_emisor OR u.id = m.id_receptor) 
-                  WHERE (m.id_emisor = ? OR m.id_receptor = ?) AND u.id != ?
-                  ORDER BY u.nombre ASC";
-$stmt_c = $conn->prepare($sql_contactos);
-$stmt_c->bind_param("iii", $mi_id, $mi_id, $mi_id);
-$stmt_c->execute();
-$contactos = $stmt_c->get_result();
-?>
+<?php include 'phpscripts/mensajesLogic.php'; ?>
 
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis Mensajes - Skill-net</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet">
+    <link rel="stylesheet" href="css/fonts.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/message.css">
 </head>
 
 <body>
-    <?php include("phpscripts/navbar.php"); ?>
     <main class="main-content">
         <div class="container mt-4">
             <div class="row">
+                <?php include("phpscripts/navbar.php"); ?>
                 <div class="col-md-4">
-                    <div class="card shadow-sm">
-                        <div class="card-header bg-white fw-bold">Mis Chats</div>
-                        <div class="list-group list-group-flush">
+                    <div class="chat-list">
+                        <div class="card-header fw-bold chat-title">Mis Chats</div>
+                        <div class="list-group chat-name p-2">
                             <?php while ($c = $contactos->fetch_assoc()): ?>
                                 <a href="mensajes.php?id=<?php echo $c['id']; ?>"
                                     class="list-group-item list-group-item-action <?php echo ($contacto_id == $c['id']) ? 'active' : ''; ?>">
@@ -112,7 +71,7 @@ $contactos = $stmt_c->get_result();
                                     <input type="hidden" name="receptor_id" value="<?php echo $contacto_id; ?>">
                                     <input type="text" name="mensaje" class="form-control me-2"
                                         placeholder="Escribe un mensaje..." required>
-                                    <button type="submit" name="enviar_msg" class="btn btn-primary"><i
+                                    <button type="submit" name="enviar_msg" class="btn-send-msg"><i
                                             class="bi bi-send"></i></button>
                                 </form>
                             </div>
