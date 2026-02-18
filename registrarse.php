@@ -1,6 +1,5 @@
 <?php include 'phpscripts/dbconn.php'; ?>
 <?php
-// Lógica de registro (se mueve arriba para evitar problemas de cabeceras)
 if (isset($_POST['registrar'])) {
     $nombre = $_POST['nombre'];
     $email = $_POST['email'];

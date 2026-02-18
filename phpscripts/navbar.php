@@ -1,5 +1,4 @@
 <?php
-// Obtenemos el nombre del archivo actual (ej: index.php)
 $pagina_actual = basename($_SERVER['PHP_SELF']);
 ?>
 <nav class="d-md-block sidebar sticky-top border-bottom border-md-end">
@@ -19,7 +18,6 @@ $pagina_actual = basename($_SERVER['PHP_SELF']);
                 </a>
             </li>
             <?php
-            // Consulta para contar mensajes no leídos dirigidos a mí
             $stmt_count = $conn->prepare("SELECT COUNT(*) as total FROM mensajes WHERE id_receptor = ? AND leido = 0");
             $stmt_count->bind_param("i", $_SESSION['user_id']);
             $stmt_count->execute();

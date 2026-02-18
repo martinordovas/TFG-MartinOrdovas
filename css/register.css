@@ -29,14 +29,13 @@ body{
 
 .login-page {
     height: 100vh;
-    overflow: hidden; /* Evita scroll innecesario en el login */
+    overflow: hidden;
 }
 
 .row.g-0 {
     height: 100vh;
 }
 
-/* Sección del Video */
 .title-side {
     position: relative;
     overflow: hidden;
@@ -52,10 +51,8 @@ body{
     min-height: 100%;
     width: auto;
     height: auto;
-    object-fit: cover; /* Clave para que el video no se estire */
+    object-fit: cover;
 }
-
-/* Sección del Formulario */
 
 .form-login{
     padding-right: 3rem;
@@ -136,12 +133,11 @@ body{
     }
 }
 @media (max-width: 768px) {
-    /* 1. Permitimos scroll y quitamos el bloqueo de altura */
     .login-page {
         overflow-y: auto; 
         height: auto;
         min-height: 100vh;
-        display: block; /* Evita que flex intente comprimirlo todo */
+        display: block;
     }
 
     .row.g-0 {
@@ -149,25 +145,22 @@ body{
         min-height: 100vh;
     }
 
-    /* 2. Ajuste del contenedor de cristal */
     .login-container {
-        padding: 2rem 1.5rem; /* Padding mucho más equilibrado */
-        margin: 40px auto;    /* Margen arriba/abajo para que no pegue al borde */
+        padding: 2rem 1.5rem;
+        margin: 40px auto;
         width: 92%;
-        max-width: none;      /* Deja que bootstrap maneje el ancho */
+        max-width: none;
     }
 
-    /* 3. Reducimos un poco el tamaño de los inputs para ganar espacio */
     .custom-input {
         padding: 10px 12px;
         margin-bottom: 0.5rem;
     }
 
     .mb-3 {
-        margin-bottom: 0.8rem !important; /* Compactamos los grupos */
+        margin-bottom: 0.8rem !important;
     }
 
-    /* 4. Ajustes de textos */
     .title-form {
         font-size: 1.6rem;
         text-align: center;
@@ -185,7 +178,6 @@ body{
     }
 }
 
-/* Optimización para móviles en horizontal (landscape) */
 @media (max-height: 600px) {
     .login-container {
         margin-top: 20px;

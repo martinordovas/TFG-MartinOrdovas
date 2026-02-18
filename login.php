@@ -4,16 +4,13 @@ if (isset($_POST['entrar'])) {
     $email = $_POST['email'];
     $pass = $_POST['password'];
 
-    // 1. Preparamos la consulta para buscar al usuario por email
     $stmt = $conn->prepare("SELECT id, nombre, password FROM usuarios WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
 
-    // 2. Obtenemos el resultado
     $result = $stmt->get_result();
 
     if ($user = $result->fetch_assoc()) {
-        // 3. Verificamos la contraseña encriptada
         if (password_verify($pass, $user['password'])) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['nombre'] = $user['nombre'];

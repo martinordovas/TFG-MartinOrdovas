@@ -9,7 +9,6 @@ if (!isset($_SESSION['user_id'])) {
 $perfil_id = isset($_GET['id']) ? intval($_GET['id']) : $_SESSION['user_id'];
 $mi_id = $_SESSION['user_id'];
 
-// --- LÓGICA DE VALORACIÓN (NUEVA) ---
 if (isset($_POST['votar'])) {
     $puntos = intval($_POST['puntuacion']);
     $comentario = trim($_POST['comentario'] ?? ''); // Limpiamos espacios vacíos
@@ -18,19 +17,16 @@ if (isset($_POST['votar'])) {
                              VALUES (?, ?, ?, ?) 
                              ON DUPLICATE KEY UPDATE puntuacion = ?, comentario = ?");
     
-    // CORRECCIÓN AQUÍ: iiisis
     $stmt_v->bind_param("iiisis", $mi_id, $perfil_id, $puntos, $comentario, $puntos, $comentario);
     
     if ($stmt_v->execute()) {
         header("Location: perfil.php?id=" . $perfil_id . "&success=1");
     } else {
-        // Esto te ayudará a ver si la base de datos escupe algún error
         die("Error en la DB: " . $stmt_v->error);
     }
     exit();
 }
 
-// --- LÓGICA DE SEGUIR ---
 if (isset($_POST['accion_follow'])) {
     if ($_POST['accion_follow'] == 'seguir') {
         $sql = "INSERT IGNORE INTO seguidores (id_seguidor, id_seguido) VALUES (?, ?)";
@@ -48,13 +44,11 @@ $stmt_check->bind_param("ii", $mi_id, $perfil_id);
 $stmt_check->execute();
 $seguido = $stmt_check->get_result()->num_rows > 0;
 
-// 3. Obtener datos de reputación
 $stmt_rep = $conn->prepare("SELECT AVG(puntuacion) as promedio, COUNT(*) as total FROM valoraciones WHERE id_valorado = ?");
 $stmt_rep->bind_param("i", $perfil_id);
 $stmt_rep->execute();
 $stats = $stmt_rep->get_result()->fetch_assoc();
 
-// 4. Traemos los datos del usuario
 $stmt = $conn->prepare("SELECT nombre, email, habilidades, bio, avatar FROM usuarios WHERE id = ?");
 $stmt->bind_param("i", $perfil_id);
 $stmt->execute();

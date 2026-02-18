@@ -32,8 +32,7 @@ include 'phpscripts/indexLogic.php';
                                         <div class="d-flex align-items-center mb-3 usr-info">
                                             <a href="perfil.php?id=<?php echo $post['id_usuario']; ?>" class="">
                                                 <?php
-                                                // Definimos la foto: si hay nombre en DB y el archivo existe físicamente
-                                                $fotoPath = "img/user.png"; // Por defecto
+                                                $fotoPath = "img/user.png";
                                                 if (!empty($post['avatar']) && file_exists("img/" . $post['avatar'])) {
                                                     $fotoPath = "img/" . $post['avatar'];
                                                 }

@@ -2,13 +2,11 @@
 CREATE DATABASE IF NOT EXISTS skillnet 
 CHARACTER SET utf8mb4 
 COLLATE utf8mb4_unicode_ci;
-drop DATABASE tfg_social_habilidades;
 drop DATABASE skillnet;
 USE skillnet;
 drop Table usuarios;
 
 
--- Tabla de usuarios (con los campos para tu perfil)
 CREATE TABLE IF NOT EXISTS usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
@@ -20,7 +18,6 @@ CREATE TABLE IF NOT EXISTS usuarios (
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Tabla de publicaciones (para el feed estilo Twitter que mencionaste)
 CREATE TABLE IF NOT EXISTS publicaciones (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_usuario INT NOT NULL,
@@ -33,8 +30,6 @@ select * from publicaciones;
 select * from usuarios;
 delete from publicaciones;
 
--- 1. INSERTAR USUARIOS 
--- Nota: La contraseña para todos es '1234' (ya encriptada con BCRYPT)
 INSERT INTO usuarios (nombre, email, password, habilidades, bio, avatar) VALUES 
 ('Jorge Villuendas', 'jorge@tfg.com', '$2y$12$m9ceJoCQEC2afg68H5xhdeC2aAmf1.NO2ZBICJeXznK2DFqYuslmq', 'PHP, MariaDB, Bootstrap', 'Estudiante de DAW trabajando en su TFG. Busco ayuda con el diseño visual.', 'user.png'),
 ('Elena Diseño', 'elena@art.com', '$2y$12$m9ceJoCQEC2afg68H5xhdeC2aAmf1.NO2ZBICJeXznK2DFqYuslmq', 'UI/UX, Figma, Photoshop', 'Diseñadora gráfica con 5 años de experiencia. Quiero aprender las bases de PHP.', 'user.png'),
@@ -45,8 +40,6 @@ UPDATE usuarios
 SET password = '$2y$12$m9ceJoCQEC2afg68H5xhdeC2aAmf1.NO2ZBICJeXznK2DFqYuslmq' 
 WHERE id > 1;
 
--- 2. INSERTAR PUBLICACIONES
--- Asumimos que los IDs generados son 1, 2, 3 y 4 respectivamente.
 INSERT INTO publicaciones (id_usuario, contenido, fecha_publicacion) VALUES 
 (2, '¡He conseguido que el sistema de login funcione con sentencias preparadas!', NOW() - INTERVAL 1 HOUR),
 (3, '¿Alguien sabe cómo conectar un formulario de contacto con una base de datos? Ofrezco clase de Figma.', NOW() - INTERVAL 2 HOUR),

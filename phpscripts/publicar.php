@@ -1,6 +1,5 @@
 <?php
 include 'dbconn.php';
-// Verificamos sesión y que el contenido no esté vacío
 if (isset($_SESSION['user_id']) && !empty($_POST['contenido'])) {
     
     $id_usuario = $_SESSION['user_id'];

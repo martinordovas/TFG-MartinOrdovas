@@ -52,10 +52,8 @@ body{
     min-height: 100%;
     width: auto;
     height: auto;
-    object-fit: cover; /* Clave para que el video no se estire */
+    object-fit: cover;
 }
-
-/* Sección del Formulario */
 
 .form-login{
     padding-right: 3rem;
@@ -136,31 +134,26 @@ body{
     }
 }
 @media (max-width: 768px) {
-    /* 1. Permitimos que la página tenga scroll si el formulario es largo */
     .login-page {
         overflow-y: auto;
         height: auto;
         min-height: 100vh;
     }
 
-    /* 2. Ajustamos el contenedor de cristal */
     .login-container {
-        padding: 2rem; /* Reducimos el padding excesivo de 7rem */
-        margin: 20px;  /* Separación de los bordes del móvil */
-        width: 90%;    /* Que aproveche el ancho */
+        padding: 2rem;
+        margin: 20px;
+        width: 90%;
         padding-top: 3rem;
         padding-bottom: 3rem;
     }
 
-    /* 3. El título lateral desaparece (ya lo hace con d-none), 
-          pero podemos ajustar el formulario para que se vea más sólido */
     .form-login {
         padding-right: 1rem;
         padding-left: 1rem;
         width: 100%;
     }
 
-    /* 4. Ajustamos los tamaños de fuente para que no griten tanto */
     .title-form {
         font-size: 1.8rem;
     }
@@ -170,7 +163,6 @@ body{
     }
 }
 
-/* Para móviles muy pequeños (iPhone SE, etc) */
 @media (max-width: 400px) {
     .login-container {
         padding: 1.5rem;
