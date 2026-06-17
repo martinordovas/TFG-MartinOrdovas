@@ -41,12 +41,12 @@ SET password = '$2y$12$m9ceJoCQEC2afg68H5xhdeC2aAmf1.NO2ZBICJeXznK2DFqYuslmq'
 WHERE id > 1;
 
 INSERT INTO publicaciones (id_usuario, contenido, fecha_publicacion) VALUES 
-(2, '¡He conseguido que el sistema de login funcione con sentencias preparadas!', NOW() - INTERVAL 1 HOUR),
-(3, '¿Alguien sabe cómo conectar un formulario de contacto con una base de datos? Ofrezco clase de Figma.', NOW() - INTERVAL 2 HOUR),
-(4, 'Si quieres mejorar el posicionamiento de tu web de SkillSwap, escríbeme. Busco programadores.', NOW() - INTERVAL 3 HOUR),
-(5, 'Acabo de subir un dataset sobre tendencias de lenguajes en 2024. ¡Súper interesante!', NOW() - INTERVAL 5 HOUR),
-(2, 'Probando el sistema de perfiles dinámicos. Esto de PHP mola bastante.', NOW() - INTERVAL 10 MINUTE),
-(3, 'He rediseñado la interfaz del buscador, ¿qué os parece?', NOW() - INTERVAL 1 DAY);
+(1, '¡He conseguido que el sistema de login funcione con sentencias preparadas!', NOW() - INTERVAL 1 HOUR),
+(2, '¿Alguien sabe cómo conectar un formulario de contacto con una base de datos? Ofrezco clase de Figma.', NOW() - INTERVAL 2 HOUR),
+(3, 'Si quieres mejorar el posicionamiento de tu web de SkillSwap, escríbeme. Busco programadores.', NOW() - INTERVAL 3 HOUR),
+(4, 'Acabo de subir un dataset sobre tendencias de lenguajes en 2024. ¡Súper interesante!', NOW() - INTERVAL 5 HOUR),
+(1, 'Probando el sistema de perfiles dinámicos. Esto de PHP mola bastante.', NOW() - INTERVAL 10 MINUTE),
+(2, 'He rediseñado la interfaz del buscador, ¿qué os parece?', NOW() - INTERVAL 1 DAY);
 
 CREATE TABLE IF NOT EXISTS mensajes (
     id INT AUTO_INCREMENT PRIMARY KEY,
